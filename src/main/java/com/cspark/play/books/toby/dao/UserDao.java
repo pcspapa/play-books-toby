@@ -2,6 +2,7 @@ package com.cspark.play.books.toby.dao;
 
 import com.cspark.play.books.toby.domain.User;
 
+import javax.sql.DataSource;
 import java.sql.*;
 
 /**
@@ -9,12 +10,16 @@ import java.sql.*;
  */
 public class UserDao {
 
-    public void add(User user) throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.jdbc.Driver");
-        Connection c = DriverManager.getConnection("jdbc:h2:tcp://localhost//devs/h2data/books/toby", "sa", "");
+    private DataSource dataSource;
 
-        PreparedStatement ps = c.prepareStatement(
-                "insert into users(id, name, password) values(?,?,?)");
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    public void add(User user) throws SQLException {
+        Connection c = this.dataSource.getConnection();
+
+        PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values(?,?,?)");
         ps.setString(1, user.getId());
         ps.setString(2, user.getName());
         ps.setString(3, user.getPassword());
@@ -25,10 +30,8 @@ public class UserDao {
         c.close();
     }
 
-
-    public User get(String id) throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.jdbc.Driver");
-        Connection c = DriverManager.getConnection("jdbc:h2:tcp://localhost//devs/h2data/books/toby", "sa", "");
+    public User get(String id) throws SQLException {
+        Connection c = this.dataSource.getConnection();
         PreparedStatement ps = c.prepareStatement("select * from users where id = ?");
         ps.setString(1, id);
 
