@@ -1,5 +1,6 @@
-package com.cspark.play.books.toby.dao;
+package com.cspark.play.books.toby.config;
 
+import com.cspark.play.books.toby.dao.UserDao;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
@@ -10,7 +11,7 @@ import javax.sql.DataSource;
  * Created by cspark on 2017. 12. 5..
  */
 @Configuration
-public class DaoFactory {
+public class TobyConfig {
     @Bean
     public DataSource dataSource() {
         SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
@@ -29,4 +30,6 @@ public class DaoFactory {
         userDao.setDataSource(dataSource());
         return userDao;
     }
+
+
 }
